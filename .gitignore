@@ -1,0 +1,27 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Spark
+derby.log
+metastore_db/
+spark-warehouse/
+
+# Delta Lake data
+data/
+
+# Kafka
+kafka-logs/
+
+# dbt
+*.duckdb
+
+# Mac
+.DS_Store
+
+# Test cache
+.pytest_cache/
+.coverage

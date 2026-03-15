@@ -1,0 +1,60 @@
+# ── Project settings ──────────────────────────────────────
+project:
+  name: stock-market-pipeline
+  version: "1.0.0"
+  env: dev
+
+# ── Data paths ────────────────────────────────────────────
+paths:
+  raw:    data/raw
+  bronze: data/bronze
+  silver: data/silver
+  gold:   data/gold
+
+# ── Kafka settings ────────────────────────────────────────
+kafka:
+  bootstrap_servers: "localhost:9092"
+  topic:             "stock_prices"
+  group_id:          "stock_consumer_group"
+  auto_offset_reset: "earliest"
+
+# ── Stock symbols to process ──────────────────────────────
+stocks:
+  symbols:
+    - AAPL
+    - TSLA
+    - gogl
+    - MSFT
+    - AMZN
+  raw_files:
+    AAPL:  "data/raw/aapl.us.txt"
+    TSLA:  "data/raw/tsla.us.txt"
+    gogl:  "data/raw/gogl.us.txt"
+    MSFT:  "data/raw/msft.us.txt"
+    AMZN:  "data/raw/amzn.us.txt"
+
+# ── Spark settings ────────────────────────────────────────
+spark:
+  app_name:          "StockMarketPipeline"
+  shuffle_partitions: 4
+  master:            "local[*]"
+
+# ── Pipeline settings ─────────────────────────────────────
+pipeline:
+  moving_avg_windows: [7, 30, 90]   # days for moving average calculation
+  top_movers_count:   10             # top N stocks by daily % change
+  batch_size:         100            # kafka producer batch size
+
+# ── Data quality thresholds ───────────────────────────────
+quality:
+  max_null_rate:      0.05   # max 5% nulls allowed
+  min_row_count:      100    # minimum rows expected per symbol
+  max_price_spike:    0.50   # max 50% price change in one day allowed
+  min_volume:         0      # volume must be >= 0
+
+# ── Airflow settings ──────────────────────────────────────
+airflow:
+  schedule:    "0 18 * * 1-5"   # weekdays at 18:00 (after market close)
+  retries:     2
+  retry_delay: 5                 # minutes
+  sla_hours:   3
