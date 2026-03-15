@@ -25,3 +25,11 @@ kafka-logs/
 # Test cache
 .pytest_cache/
 .coverage
+
+# Airflow
+orchestration/airflow.db
+orchestration/airflow.cfg
+orchestration/logs/
+orchestration/airflow-webserver.pid
+orchestration/standalone_admin_password.txt
+orchestration/webserver_config.py

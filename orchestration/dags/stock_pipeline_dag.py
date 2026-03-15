@@ -52,7 +52,7 @@ def task_sql_quality_checks(**ctx):
     paths  = get_paths(config)
     spark  = get_spark_session("DQChecks")
 
-    df = spark.read.format("delta").load(f"{paths['bronze']}/stock_prices")
+    df = spark.read.format("delta").load(f"{paths['silver']}/stock_prices")
     df.createOrReplaceTempView("stock_prices_silver")
 
     checks = [
@@ -169,8 +169,8 @@ with DAG(
         start
         >> produce
         >> consume
-        >> dq_checks
         >> bronze_silver
+        >> dq_checks
         >> silver_gold
         >> sql_layer
         >> run_tests
